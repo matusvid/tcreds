@@ -66,7 +66,13 @@ func useCredentials(name string) error {
 	}
 
 	mainTokenFilePath := filepath.Join(os.Getenv("HOME"), mainTokenFile)
-	return copyFile(tokenFile, mainTokenFilePath)
+	if err := copyFile(tokenFile, mainTokenFilePath); err != nil {
+		return err
+	}
+
+	// Print the message after successfully switching credentials
+	fmt.Println("Switched Terraform credentials to:", name)
+	return nil
 }
 
 func createCredentials(name string) error {
@@ -162,7 +168,6 @@ func copyFile(src, dst string) error {
 		return err
 	}
 
-	fmt.Println("Switched Terraform credentials to:", filepath.Base(dst))
 	return nil
 }
 
